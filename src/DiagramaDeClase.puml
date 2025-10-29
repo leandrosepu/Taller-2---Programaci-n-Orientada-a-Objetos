@@ -1,0 +1,119 @@
+@startuml
+skin rose
+top to bottom direction
+hide empty members
+
+interface Competidor <<interface>> {
+    + avanzar() : int
+    + activarPowerUp() : void
+    + tienePowerUpActivo() : boolean
+}
+class Main {
+    + {static} main(String[] args) : void
+}
+
+class SistemaJuego {
+    - corredores : ArrayList<Corredor>
+    - historial : ArrayList<String>
+    - manejadorArchivos : ManejadorArchivos
+    - scanner : Scanner
+    + SistemaJuego()
+    + iniciar() : void
+    - cargarDatos() : void
+    - mostrarMenu() : void
+    - iniciarNuevaCarrera() : void
+    - iniciarTorneo() : void
+    - mostrarResultadosTorneo(Corredor, int[]) : void
+    - seleccionarCorredor() : Corredor
+    - ordenarCorredoresAlfabeticamente(ArrayList<Corredor>) : void
+    - seleccionarOponentesAleatorios(Corredor) : ArrayList<Corredor>
+    - registrarCarreraEnHistorial(Corredor[]) : void
+    - verEstadisticas() : void
+    - guardarYSalir() : void
+}
+
+class Corredor {
+    - nombre : String
+    - velocidadBase : int
+    - powerUp : PowerUp
+    - posicionActual : int
+    - turnosPowerUp : int
+    - powerUpActivo : boolean
+    - carrerasJugadas : int
+    - victorias : int
+    - sumaPosiciones : int
+    + Corredor(String, int, PowerUp)
+    + avanzar() : int
+    + activarPowerUp() : void
+    + tienePowerUpActivo() : boolean
+    + reiniciarPosicion() : void
+    + registrarCarrera(int) : void
+    + getNombre() : String
+    + getVelocidadBase() : int
+    + getPowerUp() : PowerUp
+    + getPosicionActual() : int
+    + getCarrerasJugadas() : int
+    + getVictorias() : int
+    + getPosicionPromedio() : double
+    + getPorcentajeVictorias() : double
+    + toString() : String
+}
+
+class PowerUp {
+    - nombre : String
+    - bonus : int
+    - duracion : int
+    + PowerUp(String, int, int)
+    + getNombre() : String
+    + getBonus() : int
+    + getDuracion() : int
+    + toString() : String
+}
+
+class Carrera {
+    - participantes : ArrayList<Corredor>
+    - {static} META : int = 300
+    - {static} PAUSA_TURNOS : int = 1000
+    + Carrera()
+    + agregarParticipante(Corredor) : void
+    + simular() : Corredor[]
+    - mostrarParticipantes() : void
+    - determinarPosiciones() : Corredor[]
+    + getParticipantes() : ArrayList<Corredor>
+}
+
+class Estadisticas {
+    - corredores : ArrayList<Corredor>
+    + Estadisticas(ArrayList<Corredor>)
+    + mostrarEstadisticas() : void
+    - mostrarEstadisticasIndividuales() : void
+    - mostrarEstadisticasGlobales() : void
+    - obtenerCorredorConMasVictorias() : Corredor
+    - obtenerCorredorConMejorPorcentaje() : Corredor
+    - obtenerCorredorMasUsado() : Corredor
+}
+
+class ManejadorArchivos {
+    - {static} ARCHIVO_PERSONAJES : String = "personajes.csv"
+    - {static} ARCHIVO_HISTORIAL : String = "historial.txt"
+    + ManejadorArchivos()
+    + cargarCorredores() : ArrayList<Corredor>
+    - crearPowerUp(String) : PowerUp
+    - crearArchivoPersonajesDefault() : void
+    + cargarHistorial(ArrayList<Corredor>) : void
+    - buscarCorredor(ArrayList<Corredor>, String) : Corredor
+    + guardarHistorial(ArrayList<String>) : void
+}
+
+Main --> SistemaJuego : crea
+SistemaJuego "1" *-- "1" ManejadorArchivos : contiene
+SistemaJuego "1" o-- "*" Corredor : gestiona
+SistemaJuego --> Carrera : crea
+SistemaJuego --> Estadisticas : crea
+Corredor ..|> Competidor : implementa
+Corredor "1" *-- "1" PowerUp : tiene
+Carrera "1" o-- "3" Corredor : participa
+Estadisticas "1" --> "*" Corredor : analiza
+ManejadorArchivos ..> Corredor : carga/guarda
+ManejadorArchivos ..> PowerUp : crea
+@enduml

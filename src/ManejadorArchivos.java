@@ -3,15 +3,13 @@ import java.util.ArrayList;
 
 /**
  * Clase que maneja la lectura y escritura de archivos
- * Gestiona la persistencia de datos del sistema
  */
 public class ManejadorArchivos {
     private static final String ARCHIVO_PERSONAJES = "personajes.csv";
     private static final String ARCHIVO_HISTORIAL = "historial.txt";
 
     /**
-     * Carga los corredores desde el archivo CSV
-     * @return Lista de corredores cargados
+     * Carga los corredores
      */
     public ArrayList<Corredor> cargarCorredores() {
         ArrayList<Corredor> corredores = new ArrayList<>();
@@ -21,7 +19,7 @@ public class ManejadorArchivos {
             boolean primeraLinea = true;
 
             while ((linea = br.readLine()) != null) {
-                // Saltar la primera linea con encabezados
+                // Saltar la primera linea
                 if (primeraLinea) {
                     primeraLinea = false;
                     continue;
@@ -41,10 +39,10 @@ public class ManejadorArchivos {
                 }
             }
 
-            System.out.println("Corredores cargados exitosamente: " + corredores.size());
+           // System.out.println("Corredores cargados exitosamente: " + corredores.size()); //
 
         } catch (FileNotFoundException e) {
-            System.out.println("Archivo " + ARCHIVO_PERSONAJES + " no encontrado. Creando archivo...");
+            System.out.println("Archivo " + ARCHIVO_PERSONAJES + " no encontrado.");
             crearArchivoPersonajesDefault();
         } catch (IOException e) {
             System.out.println("Error al leer el archivo de personajes: " + e.getMessage());
@@ -55,8 +53,6 @@ public class ManejadorArchivos {
 
     /**
      * Crea un power-up basado en el nombre
-     * @param nombre Nombre del power-up
-     * @return PowerUp creado
      */
     private PowerUp crearPowerUp(String nombre) {
         // Asignar bonus y duracion segun el tipo de power-up
@@ -89,20 +85,19 @@ public class ManejadorArchivos {
             pw.println("Nermal,48,Cute Power");
             pw.println("Arlene,47,Pink Speed");
             pw.println("Jon,42,Coffee Rush");
-            System.out.println("Archivo " + ARCHIVO_PERSONAJES + " creado con datos por defecto.");
+            System.out.println("Archivo creado con datos por defecto.");
         } catch (IOException e) {
-            System.out.println("Error al crear archivo por defecto: " + e.getMessage());
+            System.out.println("Error al crear archivo: " + e.getMessage());
         }
     }
 
     /**
      * Carga el historial desde el archivo
-     * @param corredores Lista de corredores del sistema
      */
     public void cargarHistorial(ArrayList<Corredor> corredores) {
         File archivo = new File(ARCHIVO_HISTORIAL);
         if (!archivo.exists()) {
-            System.out.println("Archivo " + ARCHIVO_HISTORIAL + " no encontrado. Se creara al guardar.");
+            System.out.println("Archivo no encontrado. Se creara al guardar.");
             return;
         }
 
@@ -133,7 +128,6 @@ public class ManejadorArchivos {
                 }
             }
 
-            System.out.println("Historial cargado exitosamente: " + carrerasCargadas + " carreras");
 
         } catch (IOException e) {
             System.out.println("Error al leer el historial: " + e.getMessage());
@@ -142,9 +136,6 @@ public class ManejadorArchivos {
 
     /**
      * Busca un corredor por nombre
-     * @param corredores Lista de corredores
-     * @param nombre Nombre a buscar
-     * @return Corredor encontrado o null
      */
     private Corredor buscarCorredor(ArrayList<Corredor> corredores, String nombre) {
         for (Corredor corredor : corredores) {
@@ -157,7 +148,6 @@ public class ManejadorArchivos {
 
     /**
      * Guarda el historial en el archivo
-     * @param historial Lista de registros de carreras
      */
     public void guardarHistorial(ArrayList<String> historial) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_HISTORIAL))) {

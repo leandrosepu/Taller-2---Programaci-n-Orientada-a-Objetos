@@ -1,6 +1,6 @@
 /**
  * Clase que representa un power-up en el juego
- * Define las caracteristicas de cada poder especial
+ * Define cada poder especial
  */
 public class PowerUp {
     private String nombre;
@@ -9,9 +9,6 @@ public class PowerUp {
 
     /**
      * Constructor del power-up
-     * @param nombre Nombre del power-up
-     * @param bonus Bonus de velocidad que otorga
-     * @param duracion Duracion en turnos del efecto
      */
     public PowerUp(String nombre, int bonus, int duracion) {
         this.nombre = nombre;
@@ -21,7 +18,6 @@ public class PowerUp {
 
     /**
      * Obtiene el nombre del power-up
-     * @return Nombre del power-up
      */
     public String getNombre() {
         return nombre;
@@ -29,7 +25,6 @@ public class PowerUp {
 
     /**
      * Obtiene el bonus de velocidad
-     * @return Bonus de velocidad
      */
     public int getBonus() {
         return bonus;
@@ -37,7 +32,6 @@ public class PowerUp {
 
     /**
      * Obtiene la duracion del efecto
-     * @return Duracion en turnos
      */
     public int getDuracion() {
         return duracion;

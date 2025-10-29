@@ -2,14 +2,13 @@ import java.util.ArrayList;
 
 /**
  * Clase que maneja las estadisticas del juego
- * Procesa y muestra informacion sobre los corredores
+ * Muestra informacion sobre los corredores
  */
 public class Estadisticas {
     private ArrayList<Corredor> corredores;
 
     /**
      * Constructor de estadisticas
-     * @param corredores Lista de corredores del sistema
      */
     public Estadisticas(ArrayList<Corredor> corredores) {
         this.corredores = corredores;
@@ -19,9 +18,9 @@ public class Estadisticas {
      * Muestra todas las estadisticas del sistema
      */
     public void mostrarEstadisticas() {
-        System.out.println("\n========================================");
-        System.out.println("         ESTADISTICAS GENERALES");
-        System.out.println("========================================\n");
+        System.out.println("-----------------------------------------");
+        System.out.println("Estadisticas Generales");
+        System.out.println("-----------------------------------------");
 
         mostrarEstadisticasIndividuales();
         mostrarEstadisticasGlobales();
@@ -31,7 +30,7 @@ public class Estadisticas {
      * Muestra las estadisticas de cada corredor
      */
     private void mostrarEstadisticasIndividuales() {
-        System.out.println("--- ESTADISTICAS POR CORREDOR ---\n");
+        System.out.println("--- Estadisticas por Corredor ---");
 
         for (Corredor corredor : corredores) {
             System.out.println("Corredor: " + corredor.getNombre());
@@ -46,7 +45,7 @@ public class Estadisticas {
      * Muestra las estadisticas globales del sistema
      */
     private void mostrarEstadisticasGlobales() {
-        System.out.println("--- ESTADISTICAS GLOBALES ---\n");
+        System.out.println("--- Estadisticas Globales ---");
 
         Corredor conMasVictorias = obtenerCorredorConMasVictorias();
         if (conMasVictorias != null) {
@@ -66,12 +65,11 @@ public class Estadisticas {
                     " (" + masUsado.getCarrerasJugadas() + " carreras)");
         }
 
-        System.out.println("\n========================================\n");
+        System.out.println("---------------------------------");
     }
 
     /**
      * Obtiene el corredor con mas victorias
-     * @return Corredor con mas victorias
      */
     private Corredor obtenerCorredorConMasVictorias() {
         Corredor mejor = null;
@@ -89,7 +87,6 @@ public class Estadisticas {
 
     /**
      * Obtiene el corredor con mejor porcentaje de victorias
-     * @return Corredor con mejor porcentaje
      */
     private Corredor obtenerCorredorConMejorPorcentaje() {
         Corredor mejor = null;
@@ -108,7 +105,6 @@ public class Estadisticas {
 
     /**
      * Obtiene el corredor mas usado por los jugadores
-     * @return Corredor mas usado
      */
     private Corredor obtenerCorredorMasUsado() {
         Corredor masUsado = null;

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 /**
  * Clase que representa una carrera en el juego
- * Maneja la logica de simulacion de una carrera individual
+ * Maneja la logica de una carrera individual
  */
 public class Carrera {
     private ArrayList<Corredor> participantes;
@@ -18,7 +18,6 @@ public class Carrera {
 
     /**
      * Agrega un corredor a la carrera
-     * @param corredor Corredor a agregar
      */
     public void agregarParticipante(Corredor corredor) {
         corredor.reiniciarPosicion();
@@ -27,21 +26,20 @@ public class Carrera {
 
     /**
      * Simula la carrera completa
-     * @return Array con los corredores ordenados por posicion final
      */
     public Corredor[] simular() {
         int turno = 1;
         boolean carreraTerminada = false;
 
-        System.out.println("\n========================================");
+        System.out.println("-----------------------------------------");
         System.out.println("      INICIANDO CARRERA - META: " + META + "m");
-        System.out.println("========================================\n");
+        System.out.println("-----------------------------------------");
 
         mostrarParticipantes();
 
         // Simular turnos hasta que alguien llegue a la meta
         while (!carreraTerminada) {
-            System.out.println("\n--- TURNO " + turno + " ---");
+            System.out.println("--- TURNO " + turno + " ---");
 
             for (Corredor corredor : participantes) {
                 // Activar power-up aleatoriamente
@@ -88,7 +86,6 @@ public class Carrera {
 
     /**
      * Determina las posiciones finales de los corredores
-     * @return Array con los corredores ordenados por posicion
      */
     private Corredor[] determinarPosiciones() {
         Corredor[] posiciones = participantes.toArray(new Corredor[0]);
@@ -105,22 +102,21 @@ public class Carrera {
         }
 
         // Mostrar resultados
-        System.out.println("\n========================================");
-        System.out.println("           RESULTADOS FINALES");
-        System.out.println("========================================");
+        System.out.println("-----------------------------------------");
+        System.out.println("RESULTADOS FINALES");
+        System.out.println("-----------------------------------------");
         for (int i = 0; i < posiciones.length; i++) {
             System.out.println((i + 1) + "° lugar: " + posiciones[i].getNombre() +
                     " (" + posiciones[i].getPosicionActual() + "m)");
             posiciones[i].registrarCarrera(i + 1);
         }
-        System.out.println("========================================\n");
+        System.out.println("-----------------------------------------");
 
         return posiciones;
     }
 
     /**
      * Obtiene la lista de participantes
-     * @return Lista de participantes
      */
     public ArrayList<Corredor> getParticipantes() {
         return participantes;

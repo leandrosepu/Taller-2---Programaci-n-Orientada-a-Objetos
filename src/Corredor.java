@@ -1,6 +1,6 @@
 /**
  * Clase que representa a un corredor en el juego
- * Contiene la informacion basica y estadisticas del corredor
+ * Contiene la informacion y estadisticas del corredor
  */
 public class Corredor implements Competidor {
     private String nombre;
@@ -17,9 +17,6 @@ public class Corredor implements Competidor {
 
     /**
      * Constructor del corredor
-     * @param nombre Nombre del corredor
-     * @param velocidadBase Velocidad base del corredor
-     * @param powerUp PowerUp asociado al corredor
      */
     public Corredor(String nombre, int velocidadBase, PowerUp powerUp) {
         this.nombre = nombre;
@@ -35,7 +32,6 @@ public class Corredor implements Competidor {
 
     /**
      * Avanza el corredor en la pista
-     * @return Distancia avanzada en el turno
      */
     @Override
     public int avanzar() {
@@ -74,7 +70,6 @@ public class Corredor implements Competidor {
 
     /**
      * Verifica si el power-up esta activo
-     * @return true si el power-up esta activo
      */
     @Override
     public boolean tienePowerUpActivo() {
@@ -92,7 +87,6 @@ public class Corredor implements Competidor {
 
     /**
      * Registra una carrera jugada
-     * @param posicion Posicion final en la carrera
      */
     public void registrarCarrera(int posicion) {
         carrerasJugadas++;

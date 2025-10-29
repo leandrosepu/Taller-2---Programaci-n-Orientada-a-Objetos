@@ -1,0 +1,63 @@
+@startuml ModeloDominio
+skin rose
+top to bottom direction
+hide empty members
+
+' Entidades del dominio
+class Corredor {
+    nombre
+    velocidadBase
+    posicionActual
+    estadisticas
+}
+
+class PowerUp {
+    nombre
+    bonus
+    duracion
+}
+
+class Carrera {
+    participantes
+    meta
+    turnoActual
+}
+
+class SistemaJuego {
+    jugadores
+    historial
+}
+
+class Estadisticas {
+    carrerasJugadas
+    victorias
+    posicionPromedio
+    porcentajeVictorias
+}
+
+class Torneo {
+    rondas
+    resultados
+}
+
+class Jugador {
+    corredorSeleccionado
+}
+
+' Relaciones del dominio
+SistemaJuego "1" -- "*" Corredor : gestiona >
+SistemaJuego "1" -- "1" Jugador : tiene >
+SistemaJuego "1" -- "*" Carrera : organiza >
+
+Corredor "1" -- "1" PowerUp : posee >
+Corredor "1" -- "1" Estadisticas : mantiene >
+
+Carrera "1" -- "3" Corredor : compiten >
+Carrera "1" -- "1" Jugador : participa >
+
+Torneo "1" -- "4" Carrera : incluye >
+Torneo "1" -- "1" Jugador : participa >
+
+Jugador "1" -- "1" Corredor : selecciona >
+
+@enduml

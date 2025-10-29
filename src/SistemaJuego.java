@@ -1,9 +1,9 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Clase principal del sistema de juego
- * Controla el flujo del programa y coordina las diferentes funcionalidades
  */
 public class SistemaJuego {
     private ArrayList<Corredor> corredores;
@@ -33,15 +33,13 @@ public class SistemaJuego {
      * Carga los datos iniciales desde los archivos
      */
     private void cargarDatos() {
-        System.out.println("\n========================================");
-        System.out.println("    GARFIELD KART 2: TODO A LA DERIVA");
-        System.out.println("========================================\n");
-        System.out.println("Cargando datos del sistema...\n");
+        System.out.println("---------------------------------------------");
+        System.out.println("    GARFIELD KART 2");
+        System.out.println("---------------------------------------------");
 
         corredores = manejadorArchivos.cargarCorredores();
         manejadorArchivos.cargarHistorial(corredores);
 
-        System.out.println("\nSistema iniciado correctamente.\n");
     }
 
     /**
@@ -51,19 +49,19 @@ public class SistemaJuego {
         boolean salir = false;
 
         while (!salir) {
-            System.out.println("\n========================================");
-            System.out.println("              MENU PRINCIPAL");
-            System.out.println("========================================");
+            System.out.println("---------------------------------------------");
+            System.out.println("Menú Principal");
+            System.out.println("---------------------------------------------");
             System.out.println("1. Nueva Carrera");
             System.out.println("2. Modo Torneo");
             System.out.println("3. Ver Estadisticas");
             System.out.println("4. Guardar y Salir");
-            System.out.println("========================================");
+            System.out.println("---------------------------------------------");
             System.out.print("Seleccione una opcion: ");
 
             try {
                 int opcion = scanner.nextInt();
-                scanner.nextLine(); // Limpiar buffer
+                scanner.nextLine();
 
                 switch (opcion) {
                     case 1:
@@ -80,11 +78,11 @@ public class SistemaJuego {
                         salir = true;
                         break;
                     default:
-                        System.out.println("\nOpcion invalida. Intente nuevamente.");
+                        System.out.println("Opcion invalida. Intente nuevamente.");
                 }
             } catch (Exception e) {
-                System.out.println("\nError: Debe ingresar un numero.");
-                scanner.nextLine(); // Limpiar buffer en caso de error
+                System.out.println("Error: Debe ingresar un numero.");
+                scanner.nextLine();
             }
         }
     }
@@ -93,9 +91,9 @@ public class SistemaJuego {
      * Inicia una nueva carrera individual
      */
     private void iniciarNuevaCarrera() {
-        System.out.println("\n========================================");
-        System.out.println("            NUEVA CARRERA");
-        System.out.println("========================================\n");
+        System.out.println("---------------------------------------------");
+        System.out.println("Nueva Carrera");
+        System.out.println("---------------------------------------------");
 
         // Seleccionar corredor del jugador
         Corredor jugador = seleccionarCorredor();
@@ -118,7 +116,7 @@ public class SistemaJuego {
         // Registrar en historial
         registrarCarreraEnHistorial(resultados);
 
-        System.out.println("\nPresione Enter para continuar...");
+        System.out.println("Presiona Enter para seguir...");
         scanner.nextLine();
     }
 
@@ -126,10 +124,10 @@ public class SistemaJuego {
      * Inicia el modo torneo
      */
     private void iniciarTorneo() {
-        System.out.println("\n========================================");
-        System.out.println("            MODO TORNEO");
-        System.out.println("========================================\n");
-        System.out.println("Se jugaran 4 rondas consecutivas\n");
+        System.out.println("---------------------------------------------");
+        System.out.println("Modo Torneo");
+        System.out.println("---------------------------------------------");
+        System.out.println("Se jugaran 4 rondas");
 
         // Seleccionar corredor del jugador
         Corredor jugador = seleccionarCorredor();
@@ -137,23 +135,23 @@ public class SistemaJuego {
             return;
         }
 
-        // Array para almacenar posiciones en cada ronda
-        int[] posicionesJugador = new int[4];
+        // Seleccionar oponentes fijos para el torneo
+        ArrayList<Corredor> oponentes = seleccionarOponentesAleatorios(jugador);
+
+        // Arrays para almacenar posiciones de todos los participantes
+        int[][] posicionesPorRonda = new int[4][3]; // 4 rondas, 3 corredores
+        Corredor[] participantes = {jugador, oponentes.get(0), oponentes.get(1)};
 
         // Jugar 4 rondas
         for (int ronda = 1; ronda <= 4; ronda++) {
-            System.out.println("\n========================================");
+            System.out.println("---------------------------------------------");
             System.out.println("          RONDA " + ronda + " DE 4");
-            System.out.println("========================================");
-
-            // Seleccionar oponentes aleatorios para esta ronda
-            ArrayList<Corredor> oponentes = seleccionarOponentesAleatorios(jugador);
+            System.out.println("---------------------------------------------");
 
             // Crear y ejecutar carrera
             Carrera carrera = new Carrera();
-            carrera.agregarParticipante(jugador);
-            for (Corredor oponente : oponentes) {
-                carrera.agregarParticipante(oponente);
+            for (Corredor participante : participantes) {
+                carrera.agregarParticipante(participante);
             }
 
             Corredor[] resultados = carrera.simular();
@@ -161,100 +159,118 @@ public class SistemaJuego {
             // Registrar en historial
             registrarCarreraEnHistorial(resultados);
 
-            // Guardar posicion del jugador
+            // Guardar posiciones de todos los participantes
             for (int i = 0; i < resultados.length; i++) {
-                if (resultados[i].equals(jugador)) {
-                    posicionesJugador[ronda - 1] = i + 1;
-                    break;
+                for (int j = 0; j < participantes.length; j++) {
+                    if (resultados[i].equals(participantes[j])) {
+                        posicionesPorRonda[ronda - 1][j] = i + 1;
+                        break;
+                    }
                 }
             }
 
             if (ronda < 4) {
-                System.out.println("\nPresione Enter para continuar a la siguiente ronda...");
+                System.out.println("Presiona Enter para pasar a la siguiente ronda...");
                 scanner.nextLine();
             }
         }
 
-        // Mostrar resultados finales del torneo
-        mostrarResultadosTorneo(jugador, posicionesJugador);
+        // Mostrar resultados finales del torneo con podio
+        mostrarResultadosTorneo(participantes, posicionesPorRonda);
 
-        System.out.println("\nPresione Enter para continuar...");
+        System.out.println("Presiona Enter para seguir...");
         scanner.nextLine();
     }
 
     /**
-     * Muestra los resultados finales del torneo
-     * @param jugador Corredor del jugador
-     * @param posiciones Array con las posiciones en cada ronda
+     * Muestra los resultados finales del torneo con podio
      */
-    private void mostrarResultadosTorneo(Corredor jugador, int[] posiciones) {
-        System.out.println("\n========================================");
-        System.out.println("      RESULTADOS FINALES DEL TORNEO");
-        System.out.println("========================================\n");
+    private void mostrarResultadosTorneo(Corredor[] participantes, int[][] posicionesPorRonda) {
+        System.out.println("---------------------------------------------");
+        System.out.println("Resultados Finales!");
+        System.out.println("---------------------------------------------");
 
-        System.out.println("Corredor: " + jugador.getNombre());
-        System.out.println("\nPosiciones por ronda:");
+        // Calcular promedios de cada corredor
+        double[] promedios = new double[3];
 
-        int suma = 0;
-        for (int i = 0; i < posiciones.length; i++) {
-            System.out.println("  Ronda " + (i + 1) + ": " + posiciones[i] + "° lugar");
-            suma += posiciones[i];
+        for (int i = 0; i < participantes.length; i++) {
+            System.out.println("Corredor: " + participantes[i].getNombre());
+            System.out.println("Posiciones por ronda:");
+
+            int suma = 0;
+            for (int ronda = 0; ronda < 4; ronda++) {
+                System.out.println("  Ronda " + (ronda + 1) + ": " + posicionesPorRonda[ronda][i] + "° lugar");
+                suma += posicionesPorRonda[ronda][i];
+            }
+
+            promedios[i] = (double) suma / 4;
+            System.out.printf("Promedio de posicion: %.2f\n\n", promedios[i]);
         }
 
-        double promedio = (double) suma / posiciones.length;
-        System.out.printf("\nPromedio de posicion: %.2f\n", promedio);
+        // Crear indices para ordenar
+        Integer[] indices = {0, 1, 2};
 
-        // Determinar clasificacion
-        if (promedio <= 1.5) {
-            System.out.println("Clasificacion: ORO - Excelente desempeno!");
-        } else if (promedio <= 2.0) {
-            System.out.println("Clasificacion: PLATA - Buen desempeno!");
-        } else if (promedio <= 2.5) {
-            System.out.println("Clasificacion: BRONCE - Desempeno regular");
-        } else {
-            System.out.println("Clasificacion: PARTICIPANTE");
+        // Ordenar indices por promedio (menor promedio = mejor)
+        for (int i = 0; i < indices.length - 1; i++) {
+            for (int j = 0; j < indices.length - i - 1; j++) {
+                if (promedios[indices[j]] > promedios[indices[j + 1]]) {
+                    Integer temp = indices[j];
+                    indices[j] = indices[j + 1];
+                    indices[j + 1] = temp;
+                }
+            }
         }
 
-        System.out.println("========================================");
+        // Mostrar podio final
+        System.out.println("---------------------------------------------");
+        System.out.println("Podio Final");
+        System.out.println("---------------------------------------------");
+
+        String[] medallas = {"ORO", "PLATA", "BRONCE"};
+        for (int i = 0; i < 3; i++) {
+            int idx = indices[i];
+            System.out.printf("%d° lugar - %s: %s (Promedio: %.2f)\n",
+                    (i + 1), medallas[i], participantes[idx].getNombre(), promedios[idx]);
+        }
+
+        System.out.println("---------------------------------------------");
     }
 
     /**
      * Selecciona un corredor de la lista ordenada alfabeticamente
-     * @return Corredor seleccionado o null si se cancela
      */
     private Corredor seleccionarCorredor() {
         // Ordenar corredores alfabeticamente
         ArrayList<Corredor> corredoresOrdenados = new ArrayList<>(corredores);
         ordenarCorredoresAlfabeticamente(corredoresOrdenados);
 
-        System.out.println("Seleccione su corredor:\n");
+        System.out.println("Seleccione su corredor:");
         for (int i = 0; i < corredoresOrdenados.size(); i++) {
             System.out.println((i + 1) + ". " + corredoresOrdenados.get(i));
         }
 
-        System.out.print("\nIngrese el numero del corredor: ");
+        System.out.print("Ingrese el numero del corredor: ");
         try {
             int seleccion = scanner.nextInt();
-            scanner.nextLine(); // Limpiar buffer
+            scanner.nextLine();
 
             if (seleccion >= 1 && seleccion <= corredoresOrdenados.size()) {
                 Corredor seleccionado = corredoresOrdenados.get(seleccion - 1);
-                System.out.println("\nHas seleccionado a: " + seleccionado.getNombre());
+                System.out.println("Has seleccionado a: " + seleccionado.getNombre());
                 return seleccionado;
             } else {
-                System.out.println("\nSeleccion invalida.");
+                System.out.println("Seleccion invalida.");
                 return null;
             }
         } catch (Exception e) {
-            System.out.println("\nError en la seleccion.");
-            scanner.nextLine(); // Limpiar buffer
+            System.out.println("Error en la seleccion.");
+            scanner.nextLine();
             return null;
         }
     }
 
     /**
      * Ordena la lista de corredores alfabeticamente
-     * @param lista Lista a ordenar
      */
     private void ordenarCorredoresAlfabeticamente(ArrayList<Corredor> lista) {
         for (int i = 0; i < lista.size() - 1; i++) {
@@ -270,8 +286,6 @@ public class SistemaJuego {
 
     /**
      * Selecciona dos oponentes aleatorios diferentes al jugador
-     * @param jugador Corredor del jugador
-     * @return Lista con dos oponentes
      */
     private ArrayList<Corredor> seleccionarOponentesAleatorios(Corredor jugador) {
         ArrayList<Corredor> oponentes = new ArrayList<>();
@@ -295,12 +309,10 @@ public class SistemaJuego {
 
     /**
      * Registra una carrera en el historial
-     * @param resultados Array con los corredores ordenados por posicion
      */
     private void registrarCarreraEnHistorial(Corredor[] resultados) {
         StringBuilder registro = new StringBuilder();
 
-        // Formato: corredor1,corredor2,corredor3,posicion1,posicion2,posicion3
         for (int i = 0; i < resultados.length; i++) {
             registro.append(resultados[i].getNombre());
             if (i < resultados.length - 1) {
@@ -327,7 +339,7 @@ public class SistemaJuego {
         Estadisticas estadisticas = new Estadisticas(corredores);
         estadisticas.mostrarEstadisticas();
 
-        System.out.println("Presione Enter para continuar...");
+        System.out.println("Presione Enter para seguir...");
         scanner.nextLine();
     }
 
@@ -335,13 +347,12 @@ public class SistemaJuego {
      * Guarda los datos y sale del programa
      */
     private void guardarYSalir() {
-        System.out.println("\n========================================");
-        System.out.println("         GUARDANDO DATOS...");
-        System.out.println("========================================\n");
+        System.out.println("---------------------------------------------");
+        System.out.println("Guardando Datos");
+        System.out.println("---------------------------------------------");
 
         manejadorArchivos.guardarHistorial(historial);
 
-        System.out.println("\nGracias por jugar Garfield Kart 2!");
-        System.out.println("Hasta pronto!\n");
+        System.out.println("Gracias por jugar Garfield Kart 2!");
     }
 }
